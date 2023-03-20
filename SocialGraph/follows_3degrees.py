@@ -27,7 +27,7 @@ DEFAULT_RELAY=["wss://relay.damus.io","wss://nostr.wine", "wss://offchain.pub"]
 #connecting to the database and storing all Nico's follows
 #this function will query all event's kind 3 from Nico's PubKey in a set of relays
 #event's kind 3 are the ones where we share our contact list
-async def one_off_query_by_pub(relay=DEFAULT_RELAY):
+async def my_follows(relay=DEFAULT_RELAY):
 
     conn = ConnectingToDB(DBParams)
     cursor = conn.cursor()
@@ -37,12 +37,12 @@ async def one_off_query_by_pub(relay=DEFAULT_RELAY):
             events = await c.query({
                 'kinds':[3],
                 'authors': nico_pub,
-                'since':int((datetime.strptime('2023-03-01 00:00', '%Y-%m-%d %H:%M').timestamp()))
+                'since':int((datetime.strptime('2023-01-01 00:00', '%Y-%m-%d %H:%M').timestamp()))
             })
             for c_evt in events:
                 for x in c_evt.tags:
                     try:
-                        cursor.execute("INSERT INTO public.follows_l1 (user_pub, follows_l1_pub) VALUES('{}', '{}');".format(nico_pub[0],x[1]))    
+                        cursor.execute("INSERT INTO public.follows_l1 (user_pub, follows_l1_pub) VALUES('{}', '{}', '{}');".format(nico_pub[0],x[1]),r)    
                     except:
                         pass
                 conn.commit()
@@ -51,7 +51,7 @@ async def one_off_query_by_pub(relay=DEFAULT_RELAY):
 #With Nico's followers listed, the process will now continue querying the next degree of separation
 #for each follow, I'll extract their follows
 
-async def followers_follows(relay=DEFAULT_RELAY):
+async def follows_follows(relay=DEFAULT_RELAY):
     """
     doing a basic query using with to manage context
     :param relay:
@@ -75,7 +75,7 @@ async def followers_follows(relay=DEFAULT_RELAY):
             for c_evt in events:
                 for x in c_evt.tags:
                     try:
-                        cursor.execute("INSERT INTO public.follows_l2 (follows_l1_pub, follows_l2_pub) VALUES('{}', '{}');".format(c_evt.pub_key,x[1]))    
+                        cursor.execute("INSERT INTO public.follows_l2 (follows_l1_pub, follows_l2_pub) VALUES('{}', '{}', '{}');".format(c_evt.pub_key,x[1]),r)    
                         print(c_evt.pub_key + ' ' + x[1])
                     except:
                         print('Duplicated follow: '+ str(x[1]))
@@ -84,7 +84,7 @@ async def followers_follows(relay=DEFAULT_RELAY):
 
 #The process will repeat with the subsequent level 
 
-async def followers_follows2(relay=DEFAULT_RELAY):
+async def follows1_follows2(relay=DEFAULT_RELAY):
     """
     doing a basic query using with to manage context
     :param relay:
@@ -108,7 +108,7 @@ async def followers_follows2(relay=DEFAULT_RELAY):
             for c_evt in events:
                 for x in c_evt.tags:
                     try:
-                        cursor.execute("INSERT INTO public.follows_l3 (follows_l2_pub, follows_l3_pub) VALUES('{}', '{}');".format(c_evt.pub_key,x[1]))    
+                        cursor.execute("INSERT INTO public.follows_l3 (follows_l2_pub, follows_l3_pub) VALUES('{}', '{}', '{}');".format(c_evt.pub_key,x[1]),r)    
                         print(c_evt.pub_key + ' ' + x[1])
                     except:
                         print('Duplicated follow: '+ str(x[1]))
@@ -118,9 +118,9 @@ async def followers_follows2(relay=DEFAULT_RELAY):
 
 
 async def main():
-    await one_off_query_by_pub()
-    await followers_follows()
-    await followers_follows2()
+    await my_follows()
+    await follows_follows()
+    await follows1_follows2()
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
