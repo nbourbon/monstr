@@ -10,8 +10,11 @@ import pandas as pd
 import requests
 from datetime import datetime
 import time
-#export PYTHONPATH="$PYTHONPATH:./"
 
+#for psycopg I used pip install psycopg2-binary
+#piexport PYTHONPATH="$PYTHONPATH:./"
+
+# connecting to postgress database
 def ConnectingToDB(DBParams):
     return(psycopg2.connect(database=DBParams['database'], user=DBParams['user'], password=DBParams['password'],host=DBParams['host'], port= DBParams['port']))
 
@@ -20,9 +23,6 @@ DBParams = {'database':'postgres', 'user':'postgres', 'password':'postgres', 'ho
 
 #calling few relays 
 DEFAULT_RELAY=["wss://relay.damus.io","wss://nostr.wine", "wss://offchain.pub"]
-
-nico_follows= []
-
 
 #connecting to the database and storing all Nico's follows
 #this function will query all event's kind 3 from Nico's PubKey in a set of relays
