@@ -1,2 +1,11 @@
 /venv/
 /.idea/
+monstr/__pycache__/__init__.cpython-311.pyc
+monstr/__pycache__/encrypt.cpython-311.pyc
+monstr/__pycache__/util.cpython-311.pyc
+monstr/client/__pycache__/client.cpython-311.pyc
+monstr/client/__pycache__/event_handlers.cpython-311.pyc
+monstr/data/__pycache__/data.cpython-311.pyc
+monstr/db/__pycache__/db.cpython-311.pyc
+monstr/event/__pycache__/event.cpython-311.pyc
+monstr/ident/__pycache__/profile.cpython-311.pyc
