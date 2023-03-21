@@ -44,6 +44,14 @@ CREATE TABLE public.follows_plus (
 	CONSTRAINT followsplus_user_follow_id_pk PRIMARY KEY (user_pub, follows_pub)
 );
 
+-- DROP TABLE public.checked_relays;
+
+CREATE TABLE public.checked_relays (
+	relay_url text NOT NULL,
+	step text NOT NULL
+);
+
+
 --- drop view public.distinctrelays 
 create view public.distinctRelays
 as select count(distinct events.id), relay_url
