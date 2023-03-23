@@ -28,3 +28,11 @@ if __name__ == "__main__":
         k = Keys()
 
     print(k)
+
+
+# Converting Hex key to Bech32
+# Insert your hex key in the next sentence 
+from nostr.key import PublicKey
+hexkey = 'your_key'
+pub=PublicKey(bytes.fromhex(hexkey))
+print(pub.bech32())
