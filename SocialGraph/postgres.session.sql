@@ -26,8 +26,8 @@ CREATE TABLE public.follows_l2 (
 	follows_l1_pub text NOT NULL,
 	follows_l2_pub text NOT NULL,
 	relay_url text NOT NULL,
-	created_at timestamptz NOT NULL,
-	CONSTRAINT event_userpub_l1_l2_pk PRIMARY KEY (follows_l1_pub, follows_l2_pub, relay_url, created_at)
+	created_at timestamptz NOT NULL
+	---CONSTRAINT event_userpub_l1_l2_pk PRIMARY KEY (follows_l1_pub, follows_l2_pub, relay_url, created_at)
 );
 
 
